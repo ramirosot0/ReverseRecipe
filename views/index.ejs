@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-    <% include partials/header %> 
-    <title>Reverse Recipe</title>
+    <% include partials/header %>
+        <title>Reverse Recipe</title>
 </head>
 
 <body>
@@ -23,80 +23,85 @@
                         <a class="nav-link" href="#">Browse</a>
                     </li>
                 </ul>
-                <button class="btn btn-light mr-2 my-2 my-sm-0">Register</button>
-                <button class="btn btn-light my-2 my-sm-0">Sign in</button>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a  class="nav-link" href="#">Register</a></li>
+                  <li><a  class="nav-link" href="#">Sign in</a></li>
+                </ul>
             </div>
         </nav>
     </header>
-    <h1>Welcome to Reverse Recipe!</h1>
 
     <div class="text-center">
         <div class="dropdown m-3">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Search by Ingredient
-        </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <form class="px-4 py-3 text-center">
-                    <div class="form-group p-4">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                            <label class="form-check-label" for="dropdownCheck">
-                            Ingredient
-                        </label>
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                            <label class="form-check-label" for="dropdownCheck">
-                            Ingredient
-                        </label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-            </div>
+                <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">
+              Search by Ingredient
+            </button>
         </div>
 
-        <div class="dropdown m-3">
-            <button class="btn btn-secondary pr-4 pl-3 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Search by Diet
-        </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <form class="px-4 py-3 text-center">
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                            <label class="form-check-label" for="dropdownCheck">
-                            Diet
-                        </label>
-                        </div>
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                            <label class="form-check-label" for="dropdownCheck">
-                            Diet
-                        </label>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                </form>
-            </div>
+        <div class="m-3">
+            <form name="searchByDietForm" action="/searchByDiet">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dietOptions" id="vegetarianRadio" value="pescatarian" required>
+                  <label class="form-check-label" for="vegetarianRadio">Pescatarian</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dietOptions" id="vegetarianRadio" value="vegetarian" required>
+                  <label class="form-check-label" for="vegetarianRadio">Vegetarian</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="dietOptions" id="veganRadio" value="vegan" required>
+                  <label class="form-check-label" for="veganRadio">Vegan</label>
+                </div>
+                <button id="searchByDiet" type="submit" class="btn btn-primary mb-2">Search by Diet</button>
+            </form>
         </div>
 
         <div class="d-flex flex-row justify-content-center">
-                <form class="form-inline" name="searchByNameForm" action="/searchByName">
-                    <div class="form-group mb-2">
-                        <input id="recipeName" type="text" class="form-control mb-2" placeholder="Chicken Salad" name="recipeName" required>
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                        <button id="searchByName" type="submit" class="btn btn-primary mb-2">Search by Name</button>
-                    </div>
-                </form>
+            <form class="form-inline" name="searchByNameForm" action="/searchByName">
+                <div class="form-group mb-2">
+                    <input id="recipeName" type="text" class="form-control mb-2" placeholder="Chicken Salad" name="recipeName" required>
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <button id="searchByName" type="submit" class="btn btn-primary mb-2">Search by Name</button>
+                </div>
+            </form>
             <div id="results" class="d-flex flex-column justify-content-center"></div>
         </div>
-        
-        
+    </div>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="ingredientModal" tabindex="-1" role="dialog" aria-labelledby="ingredientModalTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="ingredientModalTitle">Select your ingredients</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="px-4 py-3 text-center" name="searchByIngredientForm" action="/searchByIngredient">
+                <div class="row">
+                    <div class="col">
+                        <input type="checkbox" class="form-check-input" name="ingredientOptions" id="chicken" value="chicken">
+                        <label class="form-check-label" for="dropdownCheck">Chicken</label>
+                    </div>
+                    <div class="col">
+                        <input type="checkbox" class="form-check-input" name="ingredientOptions" id="beef" value="beef">
+                        <label class="form-check-label" for="dropdownCheck">Beef</label>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <% include partials/footer %>  
+    <% include partials/footer %>
 </body>
 
 </html>

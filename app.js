@@ -25,10 +25,21 @@ app.get("/", function(req, res) {
 
 });
 
+app.get("/searchByIngredient", function(req, res, next){
+    // test render
+    // TODO: check database for any recipes containing selected ingredients, if no results are found, search the API for recipes
+    console.log(req.query);
+    res.render("index");
+});
+
+app.get("/searchByDiet", function(req, res, next){
+    // test render
+    // TODO: return all recipes meeting the diet requirement, give the user an option to explore more recipes from the API
+    console.log(req.query);
+    res.render("index");
+});
+
 app.get("/searchByName", async function(req, res, next) {
-    if (!req.query.recipeName){
-        next("Please enter a string");
-    }
     var search = spoonacular + "search?query=" + req.query.recipeName;
     let searchResults = await getRecipes(search);
     res.render("searchResults", {
@@ -36,6 +47,7 @@ app.get("/searchByName", async function(req, res, next) {
         "searchResults": searchResults.results
     });
 });
+
 
 app.get("/recipeSummary", async function(req, res) {
     var id = spoonacular + req.query.id + "/summary";
