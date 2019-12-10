@@ -25,46 +25,54 @@ app.get("/", function(req, res) {
 
 });
 
-app.get("/searchByIngredient", function(req, res, next){
+app.get("/searchByIngredient", async function(req, res, next) {
     // test render
     // TODO: check database for any recipes containing selected ingredients, if no results are found, search the API for recipes
-    console.log(req.query);
-    res.render("index");
+    let url = spoonacular + "findByIngredients?ingredients=" + req.query.ingredientOptions.toString();
+    let searchResults = false; // results from the database
+    if (!searchResults){
+        searchResults = await getRecipes(url);
+    }
+    res.render("searchResults", {
+        "query": req.query.ingredientOptions,
+        "searchResults": searchResults.results
+    })
 });
 
-app.get("/searchByDiet", function(req, res, next){
+app.get("/searchByDiet", function(req, res, next) {
     // test render
-    // TODO: return all recipes meeting the diet requirement, give the user an option to explore more recipes from the API
-    console.log(req.query);
+    // TODO: return all recipes meeting the diet requirement from the database, give the user an option to explore more recipes from the API
     res.render("index");
 });
 
 app.get("/searchByName", async function(req, res, next) {
-    var search = spoonacular + "search?query=" + req.query.recipeName;
-    let searchResults = await getRecipes(search);
+    var url = spoonacular + "search?query=" + req.query.recipeName;
+    let searchResults = await getRecipes(url);
     res.render("searchResults", {
-        "recipeName": req.query.recipeName,
+        "query": req.query.recipeName,
         "searchResults": searchResults.results
     });
 });
 
 
 app.get("/recipeSummary", async function(req, res) {
-    var id = spoonacular + req.query.id + "/summary";
+    var url = spoonacular + req.query.id + "/summary";
     let searchResults = await getRecipes(id);
     res.send(searchResults);
 });
 
 function getRecipes(url) {
+    console.log(url);
     return new Promise(function(resolve, reject) {
         unirest.get(url)
             .headers({
                 'Content-Type': 'application/json'
             })
             .query({
-                "apiKey": API_KEY
+                "apiKey": API_KEY,
             })
             .end(function(response) {
+                console.log(response.body);
                 resolve(response.body);
             });
     });
