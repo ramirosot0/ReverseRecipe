@@ -48,7 +48,7 @@
 
             <div class="col-sm m-2 tileBackground text-center">
                 <p class="m-2">Description</p>
-                <form name="searchByDietForm" action="/searchByDiet">
+                <form name="searchByDietForm" action="/search">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="dietOptions" id="vegetarianRadio" value="pescatarian" required>
                         <label class="form-check-label" for="vegetarianRadio">Pescatarian</label>
@@ -67,7 +67,7 @@
             
             <div class="col-sm m-2 tileBackground text-center">
                 <p class="m-2">Description</p>
-                <form class="form" name="searchByNameForm" action="/searchByName">
+                <form class="form" name="searchByNameForm" action="/search">
                     <div class="form-group mb-2">
                         <input id="recipeName" type="text" class="form-control mb-2" placeholder="Chicken Salad" name="recipeName" required>
                     </div>
@@ -115,15 +115,15 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="px-4 py-3 text-center" name="searchByIngredientForm" action="/searchByIngredient">
+                    <form class="px-4 py-3 text-center" name="searchByIngredientForm" action="/search">
                         <div class="row">
                             <div class="col">
                                 <input type="checkbox" class="form-check-input" name="ingredientOptions" id="chicken" value="chicken">
                                 <label class="form-check-label" for="dropdownCheck">Chicken</label>
                             </div>
                             <div class="col">
-                                <input type="checkbox" class="form-check-input" name="ingredientOptions" id="beef" value="beef">
-                                <label class="form-check-label" for="dropdownCheck">Beef</label>
+                                <input type="checkbox" class="form-check-input" name="ingredientOptions" id="rice" value="rice">
+                                <label class="form-check-label" for="dropdownCheck">Rice</label>
                             </div>
                         </div>
                         <div class="text-center mt-4">

@@ -6,26 +6,29 @@
     </head>
     <body class="mb-2 text-white">
         
-        <h1>Search results for: <%= query %> </h1>
+        <h1>Search results: </h1>
         
         <div>
+            <% if (searchResults.length == 0){ %>
+                <h6>No results found . . .</h6>
+            <% } %>
             <% for(var i=0; i<searchResults.length; i++) {%>
                 <div class='m-5'>
-                   <button type='button' class='btn btn-primary recipeSummary' value="<%= searchResults[i].id %>"> <%= searchResults[i].title %></button>
+                   <button id="<%= i %>" type='button' class='btn btn-primary recipeSummary' value="<%= searchResults[i].id %>"> <%= searchResults[i].title %></button>
                    <h6>Ready in <%= searchResults[i].readyInMinutes %> minutes</h6>
                    <h6>Servings: <%= searchResults[i].servings %> </h6>
-                   <img src="https://spoonacular.com/recipeImages/<%= searchResults[i].image%>">
+                   <img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-480x360">
                 </div>
             <% } %>
         </div>
         
         <div id="recipeSummaryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="recipeSummaryModalTitle" style="display: none;" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-                <div class="modal-content">
+                <div class="modal-content tileBackground">
                     <div class="modal-header">
                         <h5 class="modal-title" id="recipeSummaryModalTitle"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">×</span>
+              <span aria-hidden="true" class="text-white">&times;</span>
             </button>
                     </div>
                     <div class="modal-body">
@@ -38,8 +41,7 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+                        <a id="linkToSource" href="<%= searchResults[0].sourceUrl %>">Link to website</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +52,12 @@
     
           
     <script>
+    // TODO: fix the links to the source url
         $(document).on('click', '.recipeSummary', function(e) {
+            //  console.log("recipeSummary button clicked");
+            console.log($(this).attr("id"));
+            let idNumber = $(this).attr("id");
+            let link = <% searchResults[idNumber].sourceUrl %>
             $("#recipeSummaryModalTitle").empty();
             $("#recipeSummaryModalBody").empty();
             $("#loader").show();
@@ -64,9 +71,9 @@
                 })
                 .done(function(result) {
                     $("#loader").hide();
-                    console.log(result);
                     $("#recipeSummaryModalTitle").html(result.title);
                     $("#recipeSummaryModalBody").html(result.summary);
+                    $("#linkToSource").attr("href", link);
                 });
             $('#recipeSummaryModal').modal('show');
         });
