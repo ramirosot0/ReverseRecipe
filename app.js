@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const spoonacular = "https://api.spoonacular.com/recipes/";
+// const spoonacular = "https://api.spoonacular.com/recipes/complexSearch";
 const API_KEY = "17ad2cf054384d1ca2800726be7bf110";
 const unirest = require('unirest');
 
@@ -20,51 +20,59 @@ app.use(express.urlencoded({
 
 // routes
 app.get("/", function(req, res) {
-
     res.render("index");
-
 });
 
-app.get("/searchByIngredient", async function(req, res, next) {
-    // test render
+app.get("/search", async function(req, res, next) {
+    // check to see if the user searched by ingredients, 
+    // if not then we send an empty string to the API
+    // since we can't read the toString of undefined
+    let ingredientOptionsString = req.query.ingredientOptions;
+    if (!req.query.ingredientOptions) {
+        ingredientOptionsString = "";
+    }
+
     // TODO: check database for any recipes containing selected ingredients, if no results are found, search the API for recipes
-    let url = spoonacular + "findByIngredients?ingredients=" + req.query.ingredientOptions.toString();
     let searchResults = false; // results from the database
-    if (!searchResults){
-        searchResults = await getRecipes(url);
+    if (!searchResults) {
+        searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString);
     }
     res.render("searchResults", {
-        "query": req.query.ingredientOptions,
-        "searchResults": searchResults.results
-    })
-});
-
-app.get("/searchByDiet", function(req, res, next) {
-    // test render
-    // TODO: return all recipes meeting the diet requirement from the database, give the user an option to explore more recipes from the API
-    res.render("index");
-});
-
-app.get("/searchByName", async function(req, res, next) {
-    var url = spoonacular + "search?query=" + req.query.recipeName;
-    let searchResults = await getRecipes(url);
-    res.render("searchResults", {
-        "query": req.query.recipeName,
         "searchResults": searchResults.results
     });
 });
 
-
 app.get("/recipeSummary", async function(req, res) {
-    var url = spoonacular + req.query.id + "/summary";
-    let searchResults = await getRecipes(id);
+    console.log(req.query.id);
+    let searchResults = await getRecipeSummary(req.query.id);
     res.send(searchResults);
 });
 
-function getRecipes(url) {
-    console.log(url);
+function getRecipes(query, diet, includeIngredients) {
+
     return new Promise(function(resolve, reject) {
-        unirest.get(url)
+        unirest.get("https://api.spoonacular.com/recipes/complexSearch")
+            .headers({
+                'Content-Type': 'application/json'
+            })
+            .query({
+                "apiKey": API_KEY,
+                "query": query,
+                "diet": diet,
+                "includeIngredients": includeIngredients,
+                "addRecipeInformation": true,
+                "instructionsRequired": true
+            })
+            .end(function(response) {
+                // console.log(response.body.results);
+                resolve(response.body);
+            });
+    });
+}
+
+function getRecipeSummary(id) {
+    return new Promise(function(resolve, reject) {
+        unirest.get("https://api.spoonacular.com/recipes/" + id + "/summary")
             .headers({
                 'Content-Type': 'application/json'
             })
