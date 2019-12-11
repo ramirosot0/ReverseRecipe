@@ -86,6 +86,10 @@ app.get("/recipeSummary", async function(req, res) {
     res.send(searchResults);
 });
 
+app.get("/edit", function(req, res){
+    res.render("edit");
+});
+
 function getRecipes(query, diet, includeIngredients) {
 
     return new Promise(function(resolve, reject) {
