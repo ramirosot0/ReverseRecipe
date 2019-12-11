@@ -118,7 +118,6 @@ function getRecipeSummary(id) {
                 "apiKey": API_KEY,
             })
             .end(function(response) {
-                console.log(response.body);
                 resolve(response.body);
             });
     });
