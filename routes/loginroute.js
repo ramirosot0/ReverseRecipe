@@ -44,12 +44,17 @@ module.exports = {
         var password = req.body.passwordd;
 
         let query = 'SELECT password FROM users WHERE username = ?';
-        con.query(query, [username], (error, result, fields) =>{
-            if (error){
+        con.query(query, [username], (err, result, fields) =>{
+            if (err){
                 return res.render("login.ejs",{
                     wrong: "wrong"
                 });
             }
+           if (result.length === 0){
+               return res.render("login.ejs",{
+                   wrong: "wrong"
+               });//
+           }
 
                 const  hash = result[0].password.toString();
                 bcrypt.compare(password, hash, function(err, resp) {
@@ -66,6 +71,7 @@ module.exports = {
                         });
                     }
                  });
+
         });
     },
 
