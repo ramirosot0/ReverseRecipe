@@ -1,3 +1,5 @@
+<%var taken;%>
+<%var wrong%>
 <!doctype html>
 <html lang="en">
 
@@ -39,6 +41,19 @@
             <div class="col-md-4 login-sec">
                 <h2 class="text-center">Login Now</h2>
                 <form method="post" id="login_form" action="/login">
+
+                    <%if(taken === 'taken'){%>
+                    <div class="alert alert-danger">
+                        <p>Unsername or Email Already In Use.</p>
+                    </div>
+                    <%}%>
+
+                        <%if(wrong === 'wrong'){%>
+                            <div class="alert alert-danger">
+                                <p>Wrong Unsername or Email.</p>
+                            </div>
+                        <%}%>
+
                     <div class="form-group">
                         <label>User Name</label>
                         <input type="text" class="form-control" placeholder="User Name" id="login" name="userr" required>
@@ -56,27 +71,30 @@
 
                 <form method="post" id="register_form" action="/register">
                     <div class="form-group">
-                        <label for="exampleInputEmail1" class="text-uppercase">Username</label>
-                        <input type="text" class="form-control" placeholder="" required>
+                        <label for="exampleusername" class="text-uppercase">Username</label>
+                        <input type="text" class="form-control" placeholder="" name="userr" required>
 
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1" class="text-uppercase">Password</label>
-                        <input type="password" class="form-control" placeholder="" required>
+                        <input type="password" class="form-control" placeholder="" name="passwordd" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail" class="text-uppercase">Email</label>
+                        <input type="email" class="form-control" placeholder="" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail" class="text-uppercase">Diet</label><br>
+                        <input type="radio" name="diett" value="1" checked> No Restriction<br>
+                        <input type="radio" name="diett" value="2"> Vegetarian<br>
+                        <input type="radio" name="diett" value="3"> Vegan
                     </div>
 
 
-                    <div class="form-check">
-                        <label class="form-check-label">
-                            <input type="checkbox" class="form-check-input">
-                            <small>Remember Me</small>
-                        </label>
                         <button type="submit" class="btn btn-login float-right">Submit</button>
-                    </div>
                 </form>
 
 
-                <div class="copy-text">Created with <i class="fa fa-heart"></i> by Grafreez</div>
             </div>
             <div class="col-md-8 banner-sec">
                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">

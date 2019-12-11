@@ -5,6 +5,8 @@ const API_KEY = "17ad2cf054384d1ca2800726be7bf110";
 const unirest = require('unirest');
 const bodyparser = require('body-parser');
 const mysql = require('mysql');
+
+//express-session
 const session = require('express-session');
 //Enable sessions
 app.use(session({
@@ -17,10 +19,10 @@ app.use(session({
 
 //mysql connection
 const con = mysql.createConnection({
-   host: 'mcldisu5ppkm29wf.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-   user: 'vp4onqntwtnhnl44',
-   password:'eqgdpotw2735k904',
-   database:'oww96xtpilfl3guz'
+   host: 'ui0tj7jn8pyv9lp6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+   user: 'o46e3qfhvskvhdj9',
+   password:'pf1fzyejvyiwmwt1',
+   database:'zge4m6hnao60jhtu'
 });
 con.connect((err)=>{
     if (err){
