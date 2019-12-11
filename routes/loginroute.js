@@ -53,7 +53,7 @@ module.exports = {
            if (result.length === 0){
                return res.render("login.ejs",{
                    wrong: "wrong"
-               });
+               });//
            }
 
                 const  hash = result[0].password.toString();
