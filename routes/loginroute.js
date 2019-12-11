@@ -1,4 +1,8 @@
-
+//hash password
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const myPlaintextPassword = 's0/\/\P4$$w0rD';
+const someOtherPlaintextPassword = 'not_bacon';
 
 module.exports = {
 
@@ -9,42 +13,61 @@ module.exports = {
 
     },
 
-    logInPost: (req, res) =>{
-        var username = req.body.userr;
-        var password = req.body.passwordd;
-
-        if (username && password){
-            let query = 'SELECT * FROM accounts WHERE username = ? AND password = ?';
-            con.query(query, [username, password], (error, result, fields) =>{
-                if (result.length > 0){
-                    req.session.loggedin = true;
-                    req.session.username = username;
-                    res.redirect('/');
-                }
-                else {
-                    res.send('Incorrect Username and/or Password! ');
-                }
-            });
-        }
-        else {
-            console.log("wrong user or password");
-        }
-
-    },
-
     RegisterPost: (req, res) =>{
 
         var username = req.body.userr;
         var password = req.body.passwordd;
+        var email = req.body.email;
+        var diet = req.body.diett;
 
-        let query = 'INSERT INTO accounts (username, password) VALUES (?, ?)';
-        db.query(query, [username, password], (error, result, fields)=>{
-            if (error){
-                throw error;
-            }
-            res.redirect('/login');
+        bcrypt.hash(password, saltRounds, function(err, hash) {
+
+            let query = 'INSERT INTO users (username, password, email, diet_id) VALUES (?, ?, ?, ?)';
+            con.query(query, [username, hash, email, diet], (error, result, fields)=>{
+                if (error){
+
+                    return res.render("login.ejs",{
+                        taken: "taken"
+                    });
+
+                }
+                res.redirect('/login');
+            });
+
         });
 
+
     },
+
+    logInPost: (req, res) =>{
+        var username = req.body.userr;
+        var password = req.body.passwordd;
+
+        let query = 'SELECT password FROM users WHERE username = ?';
+        con.query(query, [username], (error, result, fields) =>{
+            if (error){
+                return res.render("login.ejs",{
+                    wrong: "wrong"
+                });
+            }
+
+                const  hash = result[0].password.toString();
+                bcrypt.compare(password, hash, function(err, resp) {
+                    // res == true
+                    console.log(resp);
+                    if (resp === true){
+                        req.session.loggedin = true;
+                        req.session.username = username;
+                        res.redirect('/');
+                    }
+                    else {
+                        res.render("login.ejs",{
+                            wrong: "wrong"
+                        });
+                    }
+                 });
+        });
+    },
+
 
 };
