@@ -54,10 +54,7 @@
     <script>
     // TODO: fix the links to the source url
         $(document).on('click', '.recipeSummary', function(e) {
-            //  console.log("recipeSummary button clicked");
             console.log($(this).attr("id"));
-            let idNumber = $(this).attr("id");
-            let link = <% searchResults[idNumber].sourceUrl %>
             $("#recipeSummaryModalTitle").empty();
             $("#recipeSummaryModalBody").empty();
             $("#loader").show();
