@@ -1,0 +1,83 @@
+<%var taken;%>
+<%var wrong%>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <% include partials/header %>
+</head>
+
+<body>
+
+
+
+<section class="login-block row justify-content-center" >
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 login-sec">
+                <h2 class="text-center">Edit Profile</h2>
+                <form method="post" id="login_form" action="/login">
+
+                    <%if(taken === 'taken'){%>
+                    <div class="alert alert-danger">
+                        <p>Unsername or Email Already In Use.</p>
+                    </div>
+                    <%}%>
+                    
+                <form method="post" id="register_form" action="/register">
+                    <div class="form-group">
+                        <label for="exampleusername" class="text-uppercase">Change Username</label>
+                        <input type="text" class="form-control" placeholder="" name="userr" required>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1" class="text-uppercase">Change Password</label>
+                        <input type="password" class="form-control" placeholder="" name="passwordd" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail" class="text-uppercase">Change Email</label>
+                        <input type="email" class="form-control" placeholder="" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail" class="text-uppercase"> Change Diet</label><br>
+                        <input type="radio" name="diett" value="1" checked> No Restriction<br>
+                        <input type="radio" name="diett" value="2"> Vegetarian<br>
+                        <input type="radio" name="diett" value="3"> Vegan
+                    </div>
+
+
+                        <button type="submit" class="btn btn-login float-right">Submit</button>
+                </form>
+
+
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script>
+    $(document).ready(function () {
+        $("#register_form").hide();
+        $("#switchForm").click(function(){
+            const isLoginVisible = $("#login_form").is(':not(:hidden)');
+            if(isLoginVisible) {
+                $("#login_form").hide();
+                $("#register_form").show();
+                $("#switchForm > p").html("Already member? Login now!");
+            } else {
+                $("#login_form").show();
+                $("#register_form").hide();
+                $("#switchForm > p").html("Not yet a member? Register now!");
+            }
+        });
+
+    });
+
+
+</script>
+
+<% include partials/footer %>
+</body>
+
+</html>
