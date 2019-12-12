@@ -3,7 +3,7 @@ body{
 }
 
 .navbar-dark{
-    background-color: #03DAC6; 
+    background-color: blue; 
 }
 
 #mainContent{
@@ -16,8 +16,8 @@ body{
     height: auto;
 }
 .btn-primary{
-    background-color: #03DAC6;
-    color: black;
+    background-color: blue;
+    color: white;
     border: none;
 }
 
@@ -29,6 +29,15 @@ body{
     color: black;
     background-color: #BB86FC;
     border-color: black; /*set the color you want here*/
+}
+
+.container{
+    color:white;
+    border:5px solid black;
+    outline: black;
+}
+.feature{
+    color:blue;
 }
 
 /*img{*/
