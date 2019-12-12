@@ -7,7 +7,7 @@ body{
 .navbar-dark{
      background: #DE6262;  /* fallback for old browsers */
         background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to bottom, white, white);  
+        background: linear-gradient(to bottom, white, white);
 }
 
 #mainContent{
