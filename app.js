@@ -14,18 +14,20 @@ app.use(session({
     path: '/',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
+    cookie: {
+        secure: false
+    }
 }));
 
 //mysql connection
 const con = mysql.createConnection({
-   host: 'ui0tj7jn8pyv9lp6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-   user: 'o46e3qfhvskvhdj9',
-   password:'pf1fzyejvyiwmwt1',
-   database:'zge4m6hnao60jhtu'
+    host: 'ui0tj7jn8pyv9lp6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'o46e3qfhvskvhdj9',
+    password: 'pf1fzyejvyiwmwt1',
+    database: 'zge4m6hnao60jhtu'
 });
-con.connect((err)=>{
-    if (err){
+con.connect((err) => {
+    if (err) {
         console.log('failed to connect to database');
     }
     console.log('Connected to database');
@@ -41,7 +43,9 @@ app.use(express.urlencoded({
     extended: false
 }));
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true}));
+app.use(bodyparser.urlencoded({
+    extended: true
+}));
 
 // enable use of json
 app.use(express.json());
@@ -51,10 +55,14 @@ app.use(express.urlencoded({
 
 
 //loginroutes
-  const {logInPage, logInPost, RegisterPost} = require('./routes/loginroute');
-  app.get("/login", logInPage);
-  app.post("/login", logInPost);
-  app.post("/register", RegisterPost);
+const {
+    logInPage,
+    logInPost,
+    RegisterPost
+} = require('./routes/loginroute');
+app.get("/login", logInPage);
+app.post("/login", logInPost);
+app.post("/register", RegisterPost);
 
 // routes
 app.get("/", function(req, res) {
@@ -71,12 +79,19 @@ app.get("/search", async function(req, res, next) {
     }
 
     // TODO: check database for any recipes containing selected ingredients, if no results are found, search the API for recipes
-    let searchResults = false; // results from the database
-    if (!searchResults) {
+    let searchResults = await getRecipeFromDatabase(req.query.dietOptions, ingredientOptionsString);
+    let resultsFromAPI = false;
+
+    if (searchResults.length == 0) {
         searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString);
+        resultsFromAPI = true;
+    }
+    if (resultsFromAPI) {
+        searchResults = searchResults.results;
     }
     res.render("searchResults", {
-        "searchResults": searchResults.results
+        "searchResults": searchResults,
+        "resultsFromAPI": resultsFromAPI
     });
 });
 
@@ -86,7 +101,7 @@ app.get("/recipeSummary", async function(req, res) {
     res.send(searchResults);
 });
 
-app.get("/edit", function(req, res){
+app.get("/edit", function(req, res) {
     res.render("edit");
 });
 
@@ -124,6 +139,32 @@ function getRecipeSummary(id) {
             .end(function(response) {
                 resolve(response.body);
             });
+    });
+}
+
+function getRecipeFromDatabase(diet, includeIngredients) {
+    if (includeIngredients) {
+        console.log("includeIngredients is empty");
+        return new Promise(function(resolve, reject) {
+            con.query(`SELECT id, recipe_name FROM recipes WHERE diet_id = 1;`, (error, results, fields) => {
+                if (error) throw error;
+                console.log(results);
+                resolve(results);
+            }); // query
+        });
+    }
+
+    return new Promise(function(resolve, reject) {
+        con.query(
+            `SELECT A.id, A.recipe_name
+            FROM recipes AS A 
+            INNER JOIN diets AS B 
+            ON A.diet_id = B.id AND B.preference = '${diet}'`,
+            (error, results, fields) => {
+                if (error) throw error;
+                console.log(results);
+                resolve(results);
+            }); // query
     });
 }
 

@@ -12,13 +12,25 @@
             <% if (searchResults.length == 0){ %>
                 <h6>No results found . . .</h6>
             <% } %>
-            <% for(var i=0; i<searchResults.length; i++) {%>
-                <div class='m-5 tileBackground' value="<%= searchResults[i].sourceUrl %>">
-                   <button id="<%= i %>" type='button' class='btn btn-primary recipeSummary' value="<%= searchResults[i].id %>"> <%= searchResults[i].title %></button>
-                   <h6>Ready in <%= searchResults[i].readyInMinutes %> minutes</h6>
-                   <h6>Servings: <%= searchResults[i].servings %> </h6>
-                   <img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-480x360">
-                </div>
+            <% if (resultsFromAPI){ %>
+                <% for(var i=0; i<searchResults.length; i++) {%>
+                    <div class='m-5 tileBackground' value="<%= searchResults[i].sourceUrl %>">
+                       <button id="<%= i %>" type='button' class='btn btn-primary recipeSummary' value="<%= searchResults[i].id %>"> <%= searchResults[i].title %></button>
+                       <h6>Ready in <%= searchResults[i].readyInMinutes %> minutes</h6>
+                       <h6>Servings: <%= searchResults[i].servings %> </h6>
+                       <img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-480x360">
+                    </div>
+                <% } %>
+            <% } else { %>
+                <% for(var i=0; i<searchResults.length; i++) {%>
+                    <div class='m-5 tileBackground' value="<%= searchResults[i].sourceUrl %>">
+                        <!--TODO: Change button to do somethiing on click-->
+                       <button id="<%= i %>" type='button' class='btn btn-primary' value="<%= searchResults[i].id %>"> <%= searchResults[i].recipe_name %></button>
+                       <!--<h6>Ready in <%= searchResults[i].readyInMinutes %> minutes</h6>-->
+                       <!--<h6>Servings: <%= searchResults[i].servings %> </h6>-->
+                       <!--<img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-480x360">-->
+                    </div>
+                <% } %>
             <% } %>
         </div>
         
