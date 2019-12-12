@@ -14,18 +14,20 @@ app.use(session({
     path: '/',
     resave: false,
     saveUninitialized: true,
+
     //cookie: { secure: false }
+
 }));
 
 //mysql connection
 const con = mysql.createConnection({
-   host: 'ui0tj7jn8pyv9lp6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
-   user: 'o46e3qfhvskvhdj9',
-   password:'pf1fzyejvyiwmwt1',
-   database:'zge4m6hnao60jhtu'
+    host: 'ui0tj7jn8pyv9lp6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user: 'o46e3qfhvskvhdj9',
+    password: 'pf1fzyejvyiwmwt1',
+    database: 'zge4m6hnao60jhtu'
 });
-con.connect((err)=>{
-    if (err){
+con.connect((err) => {
+    if (err) {
         console.log('failed to connect to database');
     }
     console.log('Connected to database');
@@ -41,7 +43,9 @@ app.use(express.urlencoded({
     extended: false
 }));
 app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: true}));
+app.use(bodyparser.urlencoded({
+    extended: true
+}));
 
 // enable use of json
 app.use(express.json());
@@ -56,7 +60,7 @@ app.use(function(req, res, next) {
 });
 
 
-//loginroutes
+
   const {logInPage, logInPost, RegisterPost, logOut, profile, edit, deletee, deleteepost} = require('./routes/loginroute');
   app.get("/login", logInPage);
   app.post("/login", logInPost);
@@ -70,25 +74,21 @@ app.use(function(req, res, next) {
   app.get('/delete', deletee);
   app.post('/delete',deleteepost)
 
+
 // routes
 app.get("/", function(req, res) {
     res.render("index");
 });
 
 app.get("/search", async function(req, res, next) {
-    // check to see if the user searched by ingredients, 
-    // if not then we send an empty string to the API
-    // since we can't read the toString of undefined
     let ingredientOptionsString = req.query.ingredientOptions;
     if (!req.query.ingredientOptions) {
         ingredientOptionsString = "";
     }
 
     // TODO: check database for any recipes containing selected ingredients, if no results are found, search the API for recipes
-    let searchResults = false; // results from the database
-    if (!searchResults) {
-        searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString);
-    }
+
+    let searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString.toString());
     res.render("searchResults", {
         "searchResults": searchResults.results
     });
@@ -100,8 +100,19 @@ app.get("/recipeSummary", async function(req, res) {
     res.send(searchResults);
 });
 
-app.get("/edit", function(req, res){
+app.get("/edit", function(req, res) {
     res.render("edit");
+});
+
+app.get("/getIngredients", async function(req, res) {
+    con.query(
+        `SELECT ingre_name FROM ingredients`,
+        (error, results, fields) => {
+            if (error) throw error;
+            // console.log(results[0].ingre_name);
+            res.send(results);
+        }
+    ); // query
 });
 
 function getRecipes(query, diet, includeIngredients) {
@@ -139,6 +150,20 @@ function getRecipeSummary(id) {
                 resolve(response.body);
             });
     });
+}
+
+function getRecipesFromDatabase(diet) {
+    con.query(
+        `SELECT A.id, A.recipe_name
+            FROM recipes AS A 
+            INNER JOIN diets AS B 
+            ON A.diet_id = B.id AND B.preference = '${diet}'`,
+        (error, results, fields) => {
+            if (error) throw error;
+            console.log(results);
+            return (results);
+        }
+    ); // query
 }
 
 // running server

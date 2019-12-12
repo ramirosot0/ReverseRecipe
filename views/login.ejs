@@ -73,8 +73,10 @@
                 <a id="switchForm" href="#">
                     <p>Not yet a member? Register now!</p></a>
 
+
                 <form method="post" id="register_form" action="/register">
                     <h2 class="text-center">Sign Up Now</h2>
+
                     <div class="form-group">
                         <label for="exampleusername" class="text-uppercase">Username</label>
                         <input type="text" class="form-control" placeholder="" name="userr" required>
@@ -147,7 +149,7 @@
 
 <script>
     $(document).ready(function () {
-        $("#register_form").hide();
+        // $("#register_form").hide();
         $("#switchForm").click(function(){
             const isLoginVisible = $("#login_form").is(':not(:hidden)');
             if(isLoginVisible) {
