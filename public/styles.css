@@ -61,9 +61,10 @@ body{
     border: 1px solid transparent;
     border-radius: .25rem;
     
+    
 }
 .navbar-dark .navbar-nav .nav-link {
-    color: rgba(0,0,0,.9);
+    color: black;
 }
 
 
