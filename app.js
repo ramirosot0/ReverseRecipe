@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
 // const spoonacular = "https://api.spoonacular.com/recipes/complexSearch";
-const API_KEY = "17ad2cf054384d1ca2800726be7bf110";
+// const API_KEY = "17ad2cf054384d1ca2800726be7bf110";
+const API_KEY = "42bfa0a4f74547978fda9ec804a5775c";
 const unirest = require('unirest');
 const bodyparser = require('body-parser');
 const mysql = require('mysql');
