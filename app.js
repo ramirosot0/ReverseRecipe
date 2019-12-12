@@ -70,28 +70,16 @@ app.get("/", function(req, res) {
 });
 
 app.get("/search", async function(req, res, next) {
-    // check to see if the user searched by ingredients, 
-    // if not then we send an empty string to the API
-    // since we can't read the toString of undefined
     let ingredientOptionsString = req.query.ingredientOptions;
     if (!req.query.ingredientOptions) {
         ingredientOptionsString = "";
     }
 
     // TODO: check database for any recipes containing selected ingredients, if no results are found, search the API for recipes
-    let searchResults = await getRecipeFromDatabase(req.query.dietOptions, ingredientOptionsString);
-    let resultsFromAPI = false;
 
-    if (searchResults.length == 0) {
-        searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString);
-        resultsFromAPI = true;
-    }
-    if (resultsFromAPI) {
-        searchResults = searchResults.results;
-    }
+    let searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString.toString());
     res.render("searchResults", {
-        "searchResults": searchResults,
-        "resultsFromAPI": resultsFromAPI
+        "searchResults": searchResults.results
     });
 });
 
@@ -103,6 +91,17 @@ app.get("/recipeSummary", async function(req, res) {
 
 app.get("/edit", function(req, res) {
     res.render("edit");
+});
+
+app.get("/getIngredients", async function(req, res) {
+    con.query(
+        `SELECT ingre_name FROM ingredients`,
+        (error, results, fields) => {
+            if (error) throw error;
+            // console.log(results[0].ingre_name);
+            res.send(results);
+        }
+    ); // query
 });
 
 function getRecipes(query, diet, includeIngredients) {
@@ -142,30 +141,18 @@ function getRecipeSummary(id) {
     });
 }
 
-function getRecipeFromDatabase(diet, includeIngredients) {
-    if (includeIngredients) {
-        console.log("includeIngredients is empty");
-        return new Promise(function(resolve, reject) {
-            con.query(`SELECT id, recipe_name FROM recipes WHERE diet_id = 1;`, (error, results, fields) => {
-                if (error) throw error;
-                console.log(results);
-                resolve(results);
-            }); // query
-        });
-    }
-
-    return new Promise(function(resolve, reject) {
-        con.query(
-            `SELECT A.id, A.recipe_name
+function getRecipesFromDatabase(diet) {
+    con.query(
+        `SELECT A.id, A.recipe_name
             FROM recipes AS A 
             INNER JOIN diets AS B 
             ON A.diet_id = B.id AND B.preference = '${diet}'`,
-            (error, results, fields) => {
-                if (error) throw error;
-                console.log(results);
-                resolve(results);
-            }); // query
-    });
+        (error, results, fields) => {
+            if (error) throw error;
+            console.log(results);
+            return (results);
+        }
+    ); // query
 }
 
 // running server
