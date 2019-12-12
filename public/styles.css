@@ -1,9 +1,13 @@
 body{
-    background-color: #121212;
+   background: #DE6262;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #FFB88C, #DE6262);
 }
 
 .navbar-dark{
-    background-color: #272727; 
+     background: #DE6262;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to bottom, white, white);  
 }
 
 #mainContent{
@@ -16,20 +20,54 @@ body{
     height: auto;
 }
 .btn-primary{
-    background-color: #03DAC6;
-    color: black;
+    background: #DE6262;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #FFB88C, #DE6262); 
+    color: white;
     border: none;
 }
 
-.navbar-dark .navbar-nav .nav-link {
-    color: white;
-}
+
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
     color: black;
     background-color: #BB86FC;
     border-color: black; /*set the color you want here*/
 }
+
+.container{
+    color:black;
+    border:5px solid black;
+    outline: black;
+    
+}
+.feature{
+    color:blue;
+}
+.col-sm{
+    background-color: white;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, white, white);
+    
+}
+.navbar-dark .navbar-brand{
+    color: black;
+}
+.navbar-toggler {
+    padding: .25rem .75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: black;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+    
+}
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(0,0,0,.9);
+}
+
+
+
 
 /*img{*/
 /*    width: 190px;*/
@@ -44,7 +82,9 @@ body{
         width:100%;
         padding : 50px 0;
     }
-    .container{background:#fff; border-radius: 10px; box-shadow:15px 20px 0px rgba(0,0,0,0.1);}
+    .container{ background-color: #DE6262;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #FFB88C, #DE6262);; border-radius: 10px; box-shadow:15px 20px 0px rgba(0,0,0,0.1);}
     .carousel-inner{border-radius:0 10px 10px 0;}
     .carousel-caption{text-align:left; left:5%;}
     .login-sec{padding: 50px 30px; position:relative;}
