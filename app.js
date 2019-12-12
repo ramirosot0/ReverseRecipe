@@ -80,6 +80,21 @@ app.get("/", function(req, res) {
     res.render("index");
 });
 
+app.get("/browse", async function(req, res) {
+    
+    let results = await getRecipesFromDatabase();
+    
+    // console.log(results);
+    res.render("browse", {
+        "results": results
+    });
+});
+
+app.get("/sortRecipes", async function(req, res){
+    let results = await getSortedRecipes(req.query.order);
+    res.send(results);
+});
+
 app.get("/search", async function(req, res, next) {
     let ingredientOptionsString = req.query.ingredientOptions;
     if (!req.query.ingredientOptions) {
@@ -110,7 +125,7 @@ app.get("/getIngredients", async function(req, res) {
         (error, results, fields) => {
             if (error) throw error;
             // console.log(results[0].ingre_name);
-            res.send(results);
+            res.send(results); 
         }
     ); // query
 });
@@ -152,18 +167,29 @@ function getRecipeSummary(id) {
     });
 }
 
-function getRecipesFromDatabase(diet) {
-    con.query(
-        `SELECT A.id, A.recipe_name
-            FROM recipes AS A 
-            INNER JOIN diets AS B 
-            ON A.diet_id = B.id AND B.preference = '${diet}'`,
-        (error, results, fields) => {
-            if (error) throw error;
-            console.log(results);
-            return (results);
-        }
-    ); // query
+function getRecipesFromDatabase() {
+    return new Promise(function(resolve, reject) {
+        con.query(
+            `SELECT recipe_name, likes, image FROM recipes`,
+            (error, results, fields) => {
+                if (error) throw error;
+                // console.log(results);
+                resolve (results);
+            }
+        ); // query
+    });
+}
+
+function getSortedRecipes(order){
+    return new Promise(function(resolve, reject) {
+        con.query(
+            `SELECT recipe_name, likes, image FROM recipes ORDER BY likes ${order}`,
+            (error, results, fields) => {
+                if (error) throw error;
+                resolve (results);
+            }
+        ); // query
+    });
 }
 
 // running server
