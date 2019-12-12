@@ -1,3 +1,5 @@
+<%var loggedin%>
+<%var username%>
 <!doctype html>
 <html lang="en">
 
@@ -23,8 +25,14 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a class="nav-link" href="#">Register</a></li>
-                    <li><a class="nav-link" href="#">Sign in</a></li>
+<!--                    <li><a class="nav-link" href="#">Register</a></li>-->
+                    <%if(!loggedin){%>
+                        <li><a class="nav-link" href="/login">Sign in</a></li>
+                    <%}else{%>
+                        <a class="navbar-brand" href="#" style="color: aqua">You Welcome <%= username%>!</a>
+                        <li><a class="nav-link" href="/profile">Profile</a></li>
+                        <li><a class="nav-link" href="/logout">Log out</a></li>
+                    <%}%>
                 </ul>
             </div>
         </nav>

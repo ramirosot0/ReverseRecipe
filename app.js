@@ -14,9 +14,9 @@ app.use(session({
     path: '/',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        secure: false
-    }
+
+    //cookie: { secure: false }
+
 }));
 
 //mysql connection
@@ -53,16 +53,27 @@ app.use(express.urlencoded({
     extended: false
 }));
 
+app.use(function(req, res, next) {
+    res.locals.loggedin = req.session.loggedin;
+    res.locals.username = req.session.username;
+    next();
+});
 
-//loginroutes
-const {
-    logInPage,
-    logInPost,
-    RegisterPost
-} = require('./routes/loginroute');
-app.get("/login", logInPage);
-app.post("/login", logInPost);
-app.post("/register", RegisterPost);
+
+
+  const {logInPage, logInPost, RegisterPost, logOut, profile, edit, deletee, deleteepost} = require('./routes/loginroute');
+  app.get("/login", logInPage);
+  app.post("/login", logInPost);
+  app.post("/register", RegisterPost);
+  app.get("/logout", logOut);
+  app.get('/profile', profile);
+
+  app.post('/edit', edit);
+
+
+  app.get('/delete', deletee);
+  app.post('/delete',deleteepost)
+
 
 // routes
 app.get("/", function(req, res) {
