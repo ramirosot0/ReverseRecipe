@@ -5,30 +5,20 @@
         <title>Search Results</title>
     </head>
     <body class="mb-2 text-white">
+        <% include partials/navbar %>
         
         <h1>Search results: </h1>
         
         <div>
             <% if (searchResults.length == 0){ %>
                 <h6>No results found . . .</h6>
-            <% } %>
-            <% if (resultsFromAPI){ %>
+            <% } else { %>
                 <% for(var i=0; i<searchResults.length; i++) {%>
                     <div class='m-5 tileBackground' value="<%= searchResults[i].sourceUrl %>">
                        <button id="<%= i %>" type='button' class='btn btn-primary recipeSummary' value="<%= searchResults[i].id %>"> <%= searchResults[i].title %></button>
                        <h6>Ready in <%= searchResults[i].readyInMinutes %> minutes</h6>
                        <h6>Servings: <%= searchResults[i].servings %> </h6>
-                       <img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-480x360">
-                    </div>
-                <% } %>
-            <% } else { %>
-                <% for(var i=0; i<searchResults.length; i++) {%>
-                    <div class='m-5 tileBackground' value="<%= searchResults[i].sourceUrl %>">
-                        <!--TODO: Change button to do somethiing on click-->
-                       <button id="<%= i %>" type='button' class='btn btn-primary' value="<%= searchResults[i].id %>"> <%= searchResults[i].recipe_name %></button>
-                       <!--<h6>Ready in <%= searchResults[i].readyInMinutes %> minutes</h6>-->
-                       <!--<h6>Servings: <%= searchResults[i].servings %> </h6>-->
-                       <!--<img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-480x360">-->
+                       <img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-312x231">
                     </div>
                 <% } %>
             <% } %>
@@ -54,7 +44,7 @@
                     </div>
                     <div class="modal-footer justify-content-center">
                         <div>
-                           <a id="linkToSource" href="<%= searchResults[0].sourceUrl %>">Link to Recipe Source</a> 
+                           <a id="linkToSource" href="">Link to Recipe Source</a> 
                         </div>
                     </div>
                 </div>
@@ -66,7 +56,6 @@
     
           
     <script>
-    // TODO: fix the links to the source url
         $(document).on('click', '.recipeSummary', function(e) {
             var link = $(this).parent().attr('value')
             $("#recipeSummaryModalTitle").empty();

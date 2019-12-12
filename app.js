@@ -14,9 +14,9 @@ app.use(session({
     path: '/',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-        secure: false
-    }
+
+    //cookie: { secure: false }
+
 }));
 
 //mysql connection
@@ -53,45 +53,59 @@ app.use(express.urlencoded({
     extended: false
 }));
 
+app.use(function(req, res, next) {
+    res.locals.loggedin = req.session.loggedin;
+    res.locals.username = req.session.username;
+    next();
+});
 
-//loginroutes
-const {
-    logInPage,
-    logInPost,
-    RegisterPost
-} = require('./routes/loginroute');
-app.get("/login", logInPage);
-app.post("/login", logInPost);
-app.post("/register", RegisterPost);
+
+
+  const {logInPage, logInPost, RegisterPost, logOut, profile, edit, deletee, deleteepost} = require('./routes/loginroute');
+  app.get("/login", logInPage);
+  app.post("/login", logInPost);
+  app.post("/register", RegisterPost);
+  app.get("/logout", logOut);
+  app.get('/profile', profile);
+
+  app.post('/edit', edit);
+
+
+  app.get('/delete', deletee);
+  app.post('/delete',deleteepost)
+
 
 // routes
 app.get("/", function(req, res) {
     res.render("index");
 });
 
+app.get("/browse", async function(req, res) {
+    
+    let results = await getRecipesFromDatabase();
+    
+    // console.log(results);
+    res.render("browse", {
+        "results": results
+    });
+});
+
+app.get("/sortRecipes", async function(req, res){
+    let results = await getSortedRecipes(req.query.order);
+    res.send(results);
+});
+
 app.get("/search", async function(req, res, next) {
-    // check to see if the user searched by ingredients, 
-    // if not then we send an empty string to the API
-    // since we can't read the toString of undefined
     let ingredientOptionsString = req.query.ingredientOptions;
     if (!req.query.ingredientOptions) {
         ingredientOptionsString = "";
     }
 
     // TODO: check database for any recipes containing selected ingredients, if no results are found, search the API for recipes
-    let searchResults = await getRecipeFromDatabase(req.query.dietOptions, ingredientOptionsString);
-    let resultsFromAPI = false;
 
-    if (searchResults.length == 0) {
-        searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString);
-        resultsFromAPI = true;
-    }
-    if (resultsFromAPI) {
-        searchResults = searchResults.results;
-    }
+    let searchResults = await getRecipes(req.query.recipeName, req.query.dietOptions, ingredientOptionsString.toString());
     res.render("searchResults", {
-        "searchResults": searchResults,
-        "resultsFromAPI": resultsFromAPI
+        "searchResults": searchResults.results
     });
 });
 
@@ -103,6 +117,17 @@ app.get("/recipeSummary", async function(req, res) {
 
 app.get("/edit", function(req, res) {
     res.render("edit");
+});
+
+app.get("/getIngredients", async function(req, res) {
+    con.query(
+        `SELECT ingre_name FROM ingredients`,
+        (error, results, fields) => {
+            if (error) throw error;
+            // console.log(results[0].ingre_name);
+            res.send(results); 
+        }
+    ); // query
 });
 
 function getRecipes(query, diet, includeIngredients) {
@@ -142,29 +167,28 @@ function getRecipeSummary(id) {
     });
 }
 
-function getRecipeFromDatabase(diet, includeIngredients) {
-    if (includeIngredients) {
-        console.log("includeIngredients is empty");
-        return new Promise(function(resolve, reject) {
-            con.query(`SELECT id, recipe_name FROM recipes WHERE diet_id = 1;`, (error, results, fields) => {
-                if (error) throw error;
-                console.log(results);
-                resolve(results);
-            }); // query
-        });
-    }
-
+function getRecipesFromDatabase() {
     return new Promise(function(resolve, reject) {
         con.query(
-            `SELECT A.id, A.recipe_name
-            FROM recipes AS A 
-            INNER JOIN diets AS B 
-            ON A.diet_id = B.id AND B.preference = '${diet}'`,
+            `SELECT recipe_name, likes, image FROM recipes`,
             (error, results, fields) => {
                 if (error) throw error;
-                console.log(results);
-                resolve(results);
-            }); // query
+                // console.log(results);
+                resolve (results);
+            }
+        ); // query
+    });
+}
+
+function getSortedRecipes(order){
+    return new Promise(function(resolve, reject) {
+        con.query(
+            `SELECT recipe_name, likes, image FROM recipes ORDER BY likes ${order}`,
+            (error, results, fields) => {
+                if (error) throw error;
+                resolve (results);
+            }
+        ); // query
     });
 }
 

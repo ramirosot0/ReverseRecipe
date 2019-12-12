@@ -1,3 +1,5 @@
+<%var loggedin%>
+<%var username%>
 <!doctype html>
 <html lang="en">
 
@@ -7,16 +9,15 @@
 </head>
 
 <body class="mb-2 text-white">
-    <header>
-       
-    </header>
+
+    <% include partials/navbar %>
 
     <div class="container">
         
         <div class="row">
             <div class="col-sm m-2 tileBackground text-center animated fadeInLeft">
                 <p class="m-2">Description</p>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">
+                <button id="loadIngredients" type="button" class="btn btn-primary" data-toggle="modal" data-target="#ingredientModal">
                     Search by Ingredient
                 </button>
             </div>
@@ -105,20 +106,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="px-4 py-3 text-center" name="searchByIngredientForm" action="/search">
-                        <div class="row">
-                            <div class="col">
-                                <input type="checkbox" class="form-check-input" name="ingredientOptions" id="chicken" value="chicken">
-                                <label class="form-check-label" for="dropdownCheck">Chicken</label>
-                            </div>
-                            <div class="col">
-                                <input type="checkbox" class="form-check-input" name="ingredientOptions" id="rice" value="rice">
-                                <label class="form-check-label" for="dropdownCheck">Rice</label>
-                            </div>
-                        </div>
-                        <div class="text-center mt-4">
-                            <button type="submit" class="btn btn-primary">Search</button>
-                        </div>
+                    <form class="px-4 py-3 text-center" name="searchByIngredientForm" id="searchByIngredient" action="/search">
+                        
                     </form>
                 </div>
             </div>
@@ -127,5 +116,23 @@
 
     <% include partials/footer %>
 </body>
+
+<script>
+    $("#loadIngredients").on('click', function(e) {
+        $("#searchByIngredient").empty();
+        $.ajax({
+                method: "GET",
+                url: "/getIngredients",
+                dataType: "json",
+            })
+            .done(function(results) {
+                for (var i = 0; i < results.length - 2; i+=2){
+                    $("#searchByIngredient").append("<div class='row'> <div class='col'> <input type='checkbox' class='form-check-input' name='ingredientOptions' value='" + results[i].ingre_name +"'><label class='form-check-label' for='dropdownCheck'>"+results[i].ingre_name+"</label></div><div class='col'><input type='checkbox' class='form-check-input' name='ingredientOptions' value='"+ results[i+1].ingre_name +"'><label class='form-check-label' for='dropdownCheck'>"+results[i+1].ingre_name +"</label></div></div>"); 
+                }
+                $("#searchByIngredient").append("<div class='text-center mt-4'><button type='submit' class='btn btn-primary'>Search</button></div>");
+            });
+        $('#recipeSummaryModal').modal('show');
+    });
+</script>
 
 </html>

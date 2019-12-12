@@ -5,6 +5,9 @@
 
 <head>
     <% include partials/header %>
+    <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">-->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 
 <body>
@@ -33,14 +36,16 @@
     .banner-text h2:after{content:" "; width:100px; height:5px; background:#FFF; display:block; margin-top:20px; border-radius:3px;}
     .banner-text p{color:#fff;}
 </style>
+<% include partials/navbar %>
 
 
 <section class="login-block">
     <div class="container animated zoomIn">
         <div class="row">
             <div class="col-md-4 login-sec">
-                <h2 class="text-center">Login Now</h2>
+<!--                <h2 class="text-center">Login Now</h2>-->
                 <form method="post" id="login_form" action="/login">
+                    <h2 class="text-center">Login Now</h2>
 
                     <%if(taken === 'taken'){%>
                     <div class="alert alert-danger">
@@ -69,7 +74,10 @@
                 <a id="switchForm" href="#">
                     <p>Not yet a member? Register now!</p></a>
 
-                <form method="post" id="register_form" action="/register" style="display: none">
+
+                <form method="post" id="register_form" action="/register">
+                    <h2 class="text-center">Sign Up Now</h2>
+
                     <div class="form-group">
                         <label for="exampleusername" class="text-uppercase">Username</label>
                         <input type="text" class="form-control" placeholder="" name="userr" required>
@@ -142,7 +150,7 @@
 
 <script>
     $(document).ready(function () {
-        // $("#register_form").hide();
+        $("#register_form").hide();
         $("#switchForm").click(function(){
             const isLoginVisible = $("#login_form").is(':not(:hidden)');
             if(isLoginVisible) {

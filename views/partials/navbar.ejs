@@ -1,0 +1,28 @@
+<header>
+        <nav id="navBar" class="navbar navbar-expand-lg navbar-dark m-2 animated zoomIn">
+            <a class="navbar-brand" href="/">Reverse Recipe</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/browse">Browse Our Recipes</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+<!--                    <li><a class="nav-link" href="#">Register</a></li>-->
+                    <%if(!loggedin){%>
+                        <li><a class="nav-link" href="/login">Sign in</a></li>
+                    <%}else{%>
+                        <a class="navbar-brand" href="#" style="color: darkblue">Welcome <%= username%>!</a>
+                        <li><a class="nav-link" href="/profile">Profile</a></li>
+                        <li><a class="nav-link" href="/logout">Log out</a></li>
+                    <%}%>
+                </ul>
+            </div>
+        </nav>
+    </header>
