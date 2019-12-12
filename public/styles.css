@@ -67,7 +67,21 @@ body{
     color: black;
 }
 
+.m-5{
+    
+    background-color: white;
+    text-align: center;
+    color: black;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 10px 0;
+    align-items: center;
+    justify-content: space-around;
+    display: flex;
+    float: none;
+    
 
+}
 
 
 /*img{*/
@@ -85,7 +99,7 @@ body{
     }
     .container{ background-color: #DE6262;  /* fallback for old browsers */
     background: -webkit-linear-gradient(to bottom, #FFB88C, #DE6262);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #FFB88C, #DE6262);; border-radius: 10px; box-shadow:15px 20px 0px rgba(0,0,0,0.1);}
+    background: linear-gradient(to bottom, white, white);; border-radius: 10px; box-shadow:15px 20px 0px rgba(0,0,0,0.1);}
     .carousel-inner{border-radius:0 10px 10px 0;}
     .carousel-caption{text-align:left; left:5%;}
     .login-sec{padding: 50px 30px; position:relative;}
