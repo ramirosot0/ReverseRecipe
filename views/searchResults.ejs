@@ -11,7 +11,7 @@
         <div>
             <% if (searchResults.length == 0){ %>
                 <h6>No results found . . .</h6>
-            <% } %>
+            <% } else { %>
                 <% for(var i=0; i<searchResults.length; i++) {%>
                     <div class='m-5 tileBackground' value="<%= searchResults[i].sourceUrl %>">
                        <button id="<%= i %>" type='button' class='btn btn-primary recipeSummary' value="<%= searchResults[i].id %>"> <%= searchResults[i].title %></button>
@@ -20,6 +20,7 @@
                        <img src="https://spoonacular.com/recipeImages/<%= searchResults[i].id%>-312x231">
                     </div>
                 <% } %>
+            <% } %>
         </div>
         
         <div id="recipeSummaryModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="recipeSummaryModalTitle" style="display: none;" aria-hidden="true">
@@ -42,7 +43,7 @@
                     </div>
                     <div class="modal-footer justify-content-center">
                         <div>
-                           <a id="linkToSource" href="<%= searchResults[0].sourceUrl %>">Link to Recipe Source</a> 
+                           <a id="linkToSource" href="">Link to Recipe Source</a> 
                         </div>
                     </div>
                 </div>
