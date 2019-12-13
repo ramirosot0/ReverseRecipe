@@ -62,18 +62,27 @@ app.use(function(req, res, next) {
 
 
 
-  const {logInPage, logInPost, RegisterPost, logOut, profile, edit, deletee, deleteepost} = require('./routes/loginroute');
-  app.get("/login", logInPage);
-  app.post("/login", logInPost);
-  app.post("/register", RegisterPost);
-  app.get("/logout", logOut);
-  app.get('/profile', profile);
+const {
+    logInPage,
+    logInPost,
+    RegisterPost,
+    logOut,
+    profile,
+    edit,
+    deletee,
+    deleteepost
+} = require('./routes/loginroute');
+app.get("/login", logInPage);
+app.post("/login", logInPost);
+app.post("/register", RegisterPost);
+app.get("/logout", logOut);
+app.get('/profile', profile);
 
-  app.post('/edit', edit);
+app.post('/edit', edit);
 
 
-  app.get('/delete', deletee);
-  app.post('/delete',deleteepost)
+app.get('/delete', deletee);
+app.post('/delete', deleteepost)
 
 
 // routes
@@ -82,16 +91,16 @@ app.get("/", function(req, res) {
 });
 
 app.get("/browse", async function(req, res) {
-    
+
     let results = await getRecipesFromDatabase();
-    
+
     // console.log(results);
     res.render("browse", {
         "results": results
     });
 });
 
-app.get("/sortRecipes", async function(req, res){
+app.get("/sortRecipes", async function(req, res) {
     let results = await getSortedRecipes(req.query.order);
     res.send(results);
 });
@@ -126,7 +135,7 @@ app.get("/getIngredients", async function(req, res) {
         (error, results, fields) => {
             if (error) throw error;
             // console.log(results[0].ingre_name);
-            res.send(results); 
+            res.send(results);
         }
     ); // query
 });
@@ -171,23 +180,28 @@ function getRecipeSummary(id) {
 function getRecipesFromDatabase() {
     return new Promise(function(resolve, reject) {
         con.query(
-            `SELECT recipe_name, likes, image FROM recipes`,
+            `SELECT recipe_name, IFNULL(users.username, "Nobody yet") AS username, image FROM recipes
+            LEFT JOIN users
+            ON users.favorites = recipes.id;`,
             (error, results, fields) => {
                 if (error) throw error;
                 // console.log(results);
-                resolve (results);
+                resolve(results);
             }
         ); // query
     });
 }
 
-function getSortedRecipes(order){
+function getSortedRecipes(order) {
     return new Promise(function(resolve, reject) {
         con.query(
-            `SELECT recipe_name, likes, image FROM recipes ORDER BY likes ${order}`,
+            `SELECT COUNT(*) as count_fav, recipes.recipe_name, recipes.image
+            FROM  recipes LEFT JOIN users 
+            ON users.favorites = recipes.id
+            GROUP BY recipes.recipe_name ORDER BY count_fav ${order};`,
             (error, results, fields) => {
                 if (error) throw error;
-                resolve (results);
+                resolve(results);
             }
         ); // query
     });
