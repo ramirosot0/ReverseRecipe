@@ -18,7 +18,7 @@
   "homepage": "https://github.com/albertsalas/ReverseRecipe#readme",
   "dependencies": {
     "animate.css": "^3.7.2",
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "ejs": "^2.7.4",
     "express": "^4.17.1",
